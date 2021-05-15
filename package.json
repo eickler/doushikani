@@ -9,6 +9,7 @@
     "dev": "preact watch",
     "lint": "eslint src",
     "test": "jest",
+    "download": "tsc download.ts && node download.js",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
@@ -18,6 +19,7 @@
     ]
   },
   "devDependencies": {
+    "axios": "^0.21.1",
     "enzyme": "^3.10.0",
     "enzyme-adapter-preact-pure": "^2.0.0",
     "eslint": "^6.0.1",
