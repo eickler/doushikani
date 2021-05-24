@@ -2,8 +2,8 @@
 
 This applications helps you to classify Japanese verbs into transitive verbs (他動詞, literally "other move words") and intransitive verbs (自動詞, literally "self move words). For example, in
 
-  ドアが開きます。(akimasu) The door opens.
-  ドアを開けます。(akemasu) (Someone) opens the door.
+    ドアが開きます。(akimasu) The door opens.
+    ドアを開けます。(akemasu) (Someone) opens the door.
 
 "開きます" is an intransitive verb and what opens is indicated through "が". "開けます" is a transitive verb and what is being opened is indicated through "を". You need to understand the difference between the two "opens" to form a correct sentence.
 
