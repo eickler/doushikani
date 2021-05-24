@@ -35,7 +35,8 @@
     "preact": "^10.5.13",
     "preact-material-components": "^1.6.1",
     "preact-render-to-string": "^5.1.19",
-    "preact-router": "^3.2.1"
+    "preact-router": "^3.2.1",
+    "supermemo": "^2.0.17"
   },
   "jest": {
     "preset": "jest-preset-preact",
