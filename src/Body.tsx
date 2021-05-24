@@ -2,6 +2,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import React from 'react';
+import { Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
   pos: {
     marginBottom: 12,
   },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular,
+  },
 }));
 
 export default function Body() {
@@ -31,15 +38,29 @@ export default function Body() {
         <Typography variant="h5" component="h2">
           上げる
         </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          あげる
-        </Typography>
-        <Typography variant="body2" component="p">
-          To raise<br/>
-          To raise something<br/>
-          To lift<br/>
-        </Typography>
-      </CardContent>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} >
+            <Typography className={classes.heading}>Transcription</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography className={classes.pos} color="textSecondary">
+              あげる          
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />} >
+            <Typography className={classes.heading}>Translation</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Typography variant="body2" component="p">
+              To raise<br/>
+              To raise something<br/>
+              To lift<br/>
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+     </CardContent>
     </Card>
   );
 }
