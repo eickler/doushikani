@@ -25,3 +25,4 @@ yarn-error.log*
 # additionally ...
 .vscode
 download.js*
+.DS_Store
