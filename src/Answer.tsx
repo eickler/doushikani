@@ -1,9 +1,8 @@
-import { Button, Card, CardContent, Container, Typography } from '@material-ui/core';
-import { VerbDefinition } from './Verbs';
+import { Card, CardContent, Container, Typography } from "@material-ui/core";
+import { VerbDefinition } from "./Verbs";
 
 interface Props {
   verb: VerbDefinition;
-  onContinue: () => void;
 }
 
 export const Answer = (props: Props) => {
@@ -11,18 +10,28 @@ export const Answer = (props: Props) => {
     <Container>
       <Card>
         <CardContent>
-          <Typography variant="h2">
+          <Typography variant="h3">
             {props.verb.transitive ? "Transitive" : "Intransitive"}
           </Typography>
-          <Typography variant="h4" color="textSecondary">
-            {props.verb.examples[0].ja}
-          </Typography>
-          <Typography variant="h4" color="textSecondary">
-            {props.verb.examples[0].en}
-          </Typography>
         </CardContent>
+        <CardContent>
+          {props.verb.meanings.map((meaning) => (
+            <Typography variant="h4" color={ meaning.primary ? "textPrimary" : "textSecondary"}>
+              {meaning.meaning}
+            </Typography>
+          ))}
+        </CardContent>
+        {props.verb.examples.map((example) => (
+          <CardContent>
+            <Typography variant="h5" color="textSecondary">
+              {example.ja}
+            </Typography>
+            <Typography variant="h5" color="textSecondary">
+              {example.en}
+            </Typography>
+          </CardContent>
+        ))}
       </Card>
-      <Button variant="contained" onClick={props.onContinue}>Continue</Button>
     </Container>
   );
-}
+};

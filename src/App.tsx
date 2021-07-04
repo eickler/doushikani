@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Question, Selection } from "./Question";
-import Header from "./Header";
-
 import { verbs, VerbDefinition } from './Verbs';
+import { Question } from "./Question";
+import { Choice, Selection } from "./Choice";
 import { Answer } from "./Answer";
+import { Container, Button } from "@material-ui/core";
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 interface State {
   verb: VerbDefinition;
@@ -28,11 +29,14 @@ const App = () => {
 
   return (
     <>
-      <Header/>
-      <Question verb={state.verb} onSelect={onSelect}/>
+      <Question verb={state.verb}/>
+      <Choice currentSelection={state.selection} onSelect={onSelect}/>
       { state.selection !== Selection.NotSelected && 
-        <Answer verb={state.verb} onContinue={onContinue}/>
+        <Answer verb={state.verb}/>
       }
+      <Container>
+        <Button variant="contained" onClick={onContinue} startIcon={<NavigateNextIcon />}>Continue</Button>
+      </Container>
     </>
   );
 }

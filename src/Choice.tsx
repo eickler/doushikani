@@ -1,7 +1,18 @@
-import { FormControl, FormControlLabel, Radio, RadioGroup } from '@material-ui/core';
+import {
+  Container,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+} from "@material-ui/core";
 
-export enum Selection { NotSelected, Transitive, Intransitive };
+export enum Selection {
+  NotSelected,
+  Transitive,
+  Intransitive,
+}
 interface Props {
+  currentSelection: Selection;
   onSelect: (selection: Selection) => void;
 }
 
@@ -17,11 +28,23 @@ export const Choice = (props: Props) => {
   };
 
   return (
-    <FormControl component="fieldset">
-      <RadioGroup row onChange={handleChange}>
-        <FormControlLabel value="transitive" control={<Radio />} label="Transitive" />
-        <FormControlLabel value="intransitive" control={<Radio />} label="Intransitive" />
-      </RadioGroup>
-    </FormControl>  
+    <Container>
+      <FormControl component="fieldset">
+        <RadioGroup row onChange={handleChange}>
+          <FormControlLabel
+            value="transitive"
+            label="Transitive"
+            checked={props.currentSelection === Selection.Transitive}
+            control={<Radio />}
+          />
+          <FormControlLabel
+            value="intransitive"
+            label="Intransitive"
+            checked={props.currentSelection === Selection.Intransitive}
+            control={<Radio />}
+          />
+        </RadioGroup>
+      </FormControl>
+    </Container>
   );
-}
+};

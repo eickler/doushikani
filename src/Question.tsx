@@ -1,25 +1,16 @@
-import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { Container } from '@material-ui/core';
-import { Choice, Selection } from './Choice';
 import { VerbDefinition } from './Verbs';
 
-const useStyles = makeStyles((theme) => ({
-  root: { marginTop: theme.spacing(3) },
-}));
-
-interface Props {
+export interface Props {
   verb: VerbDefinition;
-  onSelect: (selection: Selection) => void;
 }
 
-const Question = (props: Props) => {
-  const classes = useStyles();
-
+export const Question = (props: Props) => {
   return (
-    <Container className={classes.root}>
+    <Container>
       <Card>
         <CardContent>
           <Typography variant="h2">
@@ -30,9 +21,6 @@ const Question = (props: Props) => {
           </Typography>
         </CardContent>
       </Card>
-      <Choice onSelect={props.onSelect}/>
     </Container>
   );
 };
-
-export { Question, Selection };
