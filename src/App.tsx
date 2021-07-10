@@ -7,6 +7,7 @@ import { Question } from "./Question";
 import { Choice, Selection } from "./Choice";
 import { Answer } from "./Answer";
 import { Configuration, Setup } from "./Setup";
+import { flashcards } from './Flashcards';
 
 interface State {
   verbsToPractice: VerbDefinition[];
@@ -19,17 +20,29 @@ const pickVerb = (verbs: VerbDefinition[]): VerbDefinition => {
   return verbs[rnd];
 };
 
-const initialize = (level: number): State => {
-  const verbsToPractice = verbs.filter((verb) => verb.level <= level);
+const initialize = (level: number, amount: number): State => {
+  const dueCards = flashcards.dueCards();
+  const dueVerbs = verbs.filter(verb => dueCards.hasOwnProperty(verb.verb));
+
+  for (const verb of verbs) {
+    if (verb.level <= level && !flashcards.available(verb.verb)) {
+      dueVerbs.push(verb);
+      if (dueVerbs.length >= amount) {
+        break;
+      }
+    }
+  }
+  // However, we didn't create flashcards for the new verbs ...
+
   return {
-    verbsToPractice: verbsToPractice,
-    verb: pickVerb(verbsToPractice),
+    verbsToPractice: dueVerbs,
+    verb: pickVerb(dueVerbs),
     selection: Selection.NotSelected,
   };
 };
 
 const App = () => {
-  const [state, setState] = useState(initialize(18));
+  const [state, setState] = useState(initialize(18, 10));
 
   const onSelect = (selection: Selection) => {
     setState({ ...state, selection: selection });
@@ -44,12 +57,12 @@ const App = () => {
   };
 
   const onConfigUpdate = (config: Configuration) => {
-    setState(initialize(config.level));
+    setState(initialize(config.level, config.verbsPerDay));
   };
 
   return (
     <>
-      <Setup defaultLevel={18} onConfigUpdate={onConfigUpdate} />
+      <Setup defaultLevel={18} defaultVerbsPerDay={10} onConfigUpdate={onConfigUpdate} />
       <Question verb={state.verb} />
       <Choice currentSelection={state.selection} onSelect={onSelect} />
       {state.selection !== Selection.NotSelected && (
