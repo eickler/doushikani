@@ -1,10 +1,8 @@
-import {
-  Container,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-} from "@material-ui/core";
+import Container from "@material-ui/core/Container";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
 
 export enum Selection {
   NotSelected,
