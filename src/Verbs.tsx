@@ -28,5 +28,4 @@ export interface VerbDefinition {
   readings: [Reading];
 };
 
-// Before implementing a real filter according to the user's need, I add here a crutch to filter my level.
-export const verbs = (_verbs as [VerbDefinition]).filter(verb => verb.level < 18);
+export const verbs = _verbs as [VerbDefinition];
