@@ -59,8 +59,8 @@ class Flashcards {
     }
   }
 
-  update(verb: string, card: Flashcard, grade: SuperMemoGrade) : void {
-    const updatedItem = supermemo(card.item, grade)
+  update(verb: string, card: Flashcard, result: boolean) : void {
+    const updatedItem = supermemo(card.item, result ? 5 : 0);
     const updatedCard = {
       item: updatedItem,
       dueDate: nextDate(updatedItem.interval),
