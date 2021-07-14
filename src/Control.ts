@@ -1,6 +1,8 @@
-import { Flashcard, flashcards } from "./Flashcards";
+import { Flashcard, Flashcards } from "./Flashcards";
 import { VerbDefinition } from "./Verbs";
 import _verbs from "./verbs.json";
+
+const flashcards = new Flashcards(window.localStorage);
 
 const verbs = (() => {
   const verbs: Record<string, VerbDefinition> = {};
@@ -34,7 +36,7 @@ export class Control {
     let currentAmount = 0;
     for (const verb of Object.values(verbs)) {
       if (verb.level <= level && !flashcards.available(verb.verb)) {
-        flashcards.add([verb.verb]);
+        flashcards.add(verb.verb);
         currentAmount++;
         if (currentAmount >= amount) {
           break;
