@@ -51,7 +51,7 @@ export class Flashcards {
   dueCards() : Record<string,Flashcard> {
     const cards : Record<string,Flashcard> = {};
     for (const [key, card] of Object.entries(this._getAll())) {
-      if (card.dueDate && card.dueDate <= Date.now()) {
+      if (card.dueDate <= Date.now()) {
         cards[key] = card;
       }
     }
