@@ -1,5 +1,3 @@
-import _verbs from './verbs.json';
-
 interface Example {
   en: string;
   ja: string;
@@ -27,5 +25,3 @@ export interface VerbDefinition {
   meanings: [Meaning];
   readings: [Reading];
 };
-
-export const verbs = _verbs as [VerbDefinition];

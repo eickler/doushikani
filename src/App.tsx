@@ -2,68 +2,84 @@ import { useState } from "react";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import { verbs, VerbDefinition } from "./Verbs";
+import { VerbDefinition } from "./Verbs";
 import { Question } from "./Question";
 import { Choice, Selection } from "./Choice";
 import { Answer } from "./Answer";
 import { Configuration, Setup } from "./Setup";
+import { Control, DONE } from "./Control";
+import { Flashcards } from "./Flashcards";
+
+const defaultLevel = 18;
+const defaultAmount = 10;
 
 interface State {
-  verbsToPractice: VerbDefinition[];
+  control: Control;
   verb: VerbDefinition;
   selection: Selection;
 }
 
-const pickVerb = (verbs: VerbDefinition[]): VerbDefinition => {
-  const rnd = Math.floor(Math.random() * verbs.length);
-  return verbs[rnd];
-};
-
-const initialize = (level: number): State => {
-  const verbsToPractice = verbs.filter((verb) => verb.level <= level);
+const reinitialize = (level: number, amount: number): State => {
+  const flashcards = new Flashcards(window.localStorage);
+  const control = new Control(flashcards, level, amount);
   return {
-    verbsToPractice: verbsToPractice,
-    verb: pickVerb(verbsToPractice),
+    control: control,
+    verb: control.pick(),
     selection: Selection.NotSelected,
   };
 };
 
 const App = () => {
-  const [state, setState] = useState(initialize(18));
+  const [state, setState] = useState(() =>
+    reinitialize(defaultLevel, defaultAmount)
+  );
 
   const onSelect = (selection: Selection) => {
     setState({ ...state, selection: selection });
+    state.control.result(state.verb.verb, selection === Selection.Transitive);
   };
 
   const onContinue = () => {
     setState({
       ...state,
-      verb: pickVerb(state.verbsToPractice),
+      verb: state.control.pick(),
       selection: Selection.NotSelected,
     });
   };
 
   const onConfigUpdate = (config: Configuration) => {
-    setState(initialize(config.level));
+    setState(reinitialize(config.level, config.verbsPerDay));
   };
+
+  function showSelection() {
+    return (
+      <>
+        <Choice currentSelection={state.selection} onSelect={onSelect} />
+        {state.selection !== Selection.NotSelected && (
+          <Answer verb={state.verb} />
+        )}
+        <Container>
+          <Button
+            variant="contained"
+            onClick={onContinue}
+            startIcon={<NavigateNextIcon />}
+          >
+            Continue
+          </Button>
+        </Container>
+      </>
+    );
+  }
 
   return (
     <>
-      <Setup defaultLevel={18} onConfigUpdate={onConfigUpdate} />
+      <Setup
+        defaultLevel={defaultLevel}
+        defaultVerbsPerDay={defaultAmount}
+        onConfigUpdate={onConfigUpdate}
+      />
       <Question verb={state.verb} />
-      <Choice currentSelection={state.selection} onSelect={onSelect} />
-      {state.selection !== Selection.NotSelected && (
-        <Answer verb={state.verb} />
-      )}
-      <Container>
-        <Button
-          variant="contained"
-          onClick={onContinue}
-          startIcon={<NavigateNextIcon />}
-        >
-          Continue
-        </Button>
-      </Container>
+      {state.verb !== DONE && showSelection()}
     </>
   );
 };
