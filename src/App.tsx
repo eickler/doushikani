@@ -7,7 +7,8 @@ import { Question } from "./Question";
 import { Choice, Selection } from "./Choice";
 import { Answer } from "./Answer";
 import { Configuration, Setup } from "./Setup";
-import { Control } from "./Control";
+import { Control, DONE } from "./Control";
+import { Flashcards } from "./Flashcards";
 
 const defaultLevel = 18;
 const defaultAmount = 10;
@@ -18,8 +19,9 @@ interface State {
   selection: Selection;
 }
 
-const initialize = (level: number, amount: number): State => {
-  const control = new Control(level, amount);
+const reinitialize = (level: number, amount: number): State => {
+  const flashcards = new Flashcards(window.localStorage);
+  const control = new Control(flashcards, level, amount);
   return {
     control: control,
     verb: control.pick(),
@@ -28,11 +30,13 @@ const initialize = (level: number, amount: number): State => {
 };
 
 const App = () => {
-  const [state, setState] = useState(initialize(defaultLevel, defaultAmount));
+  const [state, setState] = useState(() =>
+    reinitialize(defaultLevel, defaultAmount)
+  );
 
   const onSelect = (selection: Selection) => {
     setState({ ...state, selection: selection });
-    // check the state here ...
+    state.control.result(state.verb.verb, selection === Selection.Transitive);
   };
 
   const onContinue = () => {
@@ -44,8 +48,28 @@ const App = () => {
   };
 
   const onConfigUpdate = (config: Configuration) => {
-    setState(initialize(config.level, config.verbsPerDay));
+    setState(reinitialize(config.level, config.verbsPerDay));
   };
+
+  function showSelection() {
+    return (
+      <>
+        <Choice currentSelection={state.selection} onSelect={onSelect} />
+        {state.selection !== Selection.NotSelected && (
+          <Answer verb={state.verb} />
+        )}
+        <Container>
+          <Button
+            variant="contained"
+            onClick={onContinue}
+            startIcon={<NavigateNextIcon />}
+          >
+            Continue
+          </Button>
+        </Container>
+      </>
+    );
+  }
 
   return (
     <>
@@ -55,19 +79,7 @@ const App = () => {
         onConfigUpdate={onConfigUpdate}
       />
       <Question verb={state.verb} />
-      <Choice currentSelection={state.selection} onSelect={onSelect} />
-      {state.selection !== Selection.NotSelected && (
-        <Answer verb={state.verb} />
-      )}
-      <Container>
-        <Button
-          variant="contained"
-          onClick={onContinue}
-          startIcon={<NavigateNextIcon />}
-        >
-          Continue
-        </Button>
-      </Container>
+      {state.verb !== DONE && showSelection()}
     </>
   );
 };

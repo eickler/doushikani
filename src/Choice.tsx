@@ -33,13 +33,13 @@ export const Choice = (props: Props) => {
             value="transitive"
             label="Transitive"
             checked={props.currentSelection === Selection.Transitive}
-            control={<Radio />}
+            control={<Radio disabled={props.currentSelection !== Selection.NotSelected} />}
           />
           <FormControlLabel
             value="intransitive"
             label="Intransitive"
             checked={props.currentSelection === Selection.Intransitive}
-            control={<Radio />}
+            control={<Radio disabled={props.currentSelection !== Selection.NotSelected}/>}
           />
         </RadioGroup>
       </FormControl>

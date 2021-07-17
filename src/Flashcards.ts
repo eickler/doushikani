@@ -58,8 +58,10 @@ export class Flashcards {
     return cards;
   }
 
-  add(verb: string) : void {
-    this._set(verb, { item: defaultItem, dueDate: Date.now() });
+  add(verb: string) : Flashcard {
+    const card = { item: defaultItem, dueDate: Date.now() };
+    this._set(verb, card);
+    return card;
   }
 
   update(verb: string, card: Flashcard, result: boolean) : void {
