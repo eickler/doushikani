@@ -2,6 +2,7 @@ import { supermemo, SuperMemoItem } from "supermemo";
 
 const MARKER = '動詞 ';
 const DAY = 24*60*60*1000;
+const DAY_KEY = 'dkDay';
 
 export interface Flashcard {
   item: SuperMemoItem;
@@ -42,7 +43,14 @@ export class Flashcards {
       }
     }
     return cards;
-  }  
+  }
+
+  shouldGetNewCards() : boolean {
+    const today = new Date().setHours(0, 0, 0, 0);
+    const lastSet = Number(this.storage.getItem(DAY_KEY));
+    this.storage.setItem(DAY_KEY, today.toString());
+    return today > lastSet;
+  }
 
   available(verb: string) : boolean {
     return this._get(verb) === null;

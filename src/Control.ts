@@ -2,7 +2,7 @@ import { Flashcard, Flashcards } from "./Flashcards";
 import { VerbDefinition } from "./Verbs";
 import _verbs from "./verbs.json";
 
-const verbs = (() => {
+export const verbs = (() => {
   const verbs: Record<string, VerbDefinition> = {};
   for (const verb of _verbs as [VerbDefinition]) {
     verbs[verb.verb] = verb;
@@ -35,8 +35,9 @@ export class Control {
   constructor(flashcards: Flashcards, level: number, amount: number) {
     this.flashcards = flashcards;
     const freshCardsToGet = this.cardsToRepeat(amount);
-    // Pull fresh cards only once a day!!
-    this.freshCards(level, freshCardsToGet);
+    if (flashcards.shouldGetNewCards()) {
+      this.freshCards(level, freshCardsToGet);
+    }
   }
 
   private cardsToRepeat(amount: number): number {
