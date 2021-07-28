@@ -26,3 +26,6 @@ yarn-error.log*
 .vscode
 download.js*
 .DS_Store
+
+.idea
+venv
