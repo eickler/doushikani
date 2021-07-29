@@ -9,10 +9,12 @@ enum Flow { Intro, Run, Goodbye }
 const storage = new PersistentStorage();
 
 const Main = () => {
-  // Starting state should be Flow.Intro if flow is not skipped, otherwise Flow.Run.
-  const [state, setState] = useState(Flow.Intro);
+  const [state, setState] = useState(storage.shouldSkipIntro() ? Flow.Run : Flow.Intro);
 
-  const onFinishIntro = () => {
+  const onFinishIntro = (skip: boolean) => {
+    if (skip) {
+      storage.skipIntroNextTime();
+    }
     setState(Flow.Run);
   };
 
