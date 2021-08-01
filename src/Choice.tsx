@@ -1,4 +1,3 @@
-import Container from "@material-ui/core/Container";
 import FormControl from "@material-ui/core/FormControl";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
@@ -26,7 +25,6 @@ export const Choice = (props: Props) => {
   };
 
   return (
-    <Container>
       <FormControl component="fieldset">
         <RadioGroup row onChange={handleChange}>
           <FormControlLabel
@@ -43,6 +41,5 @@ export const Choice = (props: Props) => {
           />
         </RadioGroup>
       </FormControl>
-    </Container>
   );
 };

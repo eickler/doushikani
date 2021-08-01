@@ -1,14 +1,17 @@
 import { Control, verbs } from "./Control";
 import { Flashcards } from "./Flashcards";
+import { PersistentStorage } from "./PersistentStorage";
 
 describe("Test flashcards", () => {
+  const storage = new PersistentStorage();
+  const flashcards = new Flashcards(storage);
+
   beforeEach(() => {
     window.localStorage.clear();
   });
 
   it("Should initially pull only new verbs", () => {
-    const flashcards = new Flashcards(window.localStorage);
-    expect(Object.keys(flashcards._getAll()).length).toBe(0);
+    expect(Object.keys(storage.getAll()).length).toBe(0);
 
     const nbrToLearn = 2;
     const control = new Control(flashcards, 60, nbrToLearn);
@@ -19,7 +22,6 @@ describe("Test flashcards", () => {
   });
 
   it("Should pull new cards if there are not enough due cards", () => {
-    const flashcards = new Flashcards(window.localStorage);
     const card = flashcards.add("入る");
     flashcards.update("入る", card, true);
 
@@ -32,7 +34,6 @@ describe("Test flashcards", () => {
   });
 
   it("Shoudl pull due cards if there are due cards", () => {
-    const flashcards = new Flashcards(window.localStorage);
     const card = flashcards.add("入る");
 
     const nbrToLearn = 1;

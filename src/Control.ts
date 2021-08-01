@@ -1,4 +1,5 @@
-import { Flashcard, Flashcards } from "./Flashcards";
+import { Flashcard } from "./Flashcard";
+import { Flashcards } from "./Flashcards";
 import { VerbDefinition } from "./Verbs";
 import _verbs from "./verbs.json";
 
@@ -35,8 +36,9 @@ export class Control {
   constructor(flashcards: Flashcards, level: number, amount: number) {
     this.flashcards = flashcards;
     const freshCardsToGet = this.cardsToRepeat(amount);
-    if (flashcards.shouldGetNewCards()) {
+    if (flashcards.storage.shouldGetNewCards()) {
       this.freshCards(level, freshCardsToGet);
+      flashcards.storage.gotNewCards();
     }
   }
 

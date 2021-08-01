@@ -9,9 +9,15 @@ import { Answer } from "./Answer";
 import { Configuration, Setup } from "./Setup";
 import { Control, DONE } from "./Control";
 import { Flashcards } from "./Flashcards";
+import { PersistentStorage } from "./PersistentStorage";
 
 const defaultLevel = 18;
 const defaultAmount = 10;
+
+interface Props {
+  storage: PersistentStorage;
+  onFinish: () => void;
+}
 
 interface State {
   control: Control;
@@ -19,8 +25,8 @@ interface State {
   selection: Selection;
 }
 
-const reinitialize = (level: number, amount: number): State => {
-  const flashcards = new Flashcards(window.localStorage);
+const reinitialize = (storage: PersistentStorage, level: number, amount: number): State => {
+  const flashcards = new Flashcards(storage);
   const control = new Control(flashcards, level, amount);
   return {
     control: control,
@@ -29,9 +35,9 @@ const reinitialize = (level: number, amount: number): State => {
   };
 };
 
-const App = () => {
+const App = (props: Props) => {
   const [state, setState] = useState(() =>
-    reinitialize(defaultLevel, defaultAmount)
+    reinitialize(props.storage, defaultLevel, defaultAmount)
   );
 
   const onSelect = (selection: Selection) => {
@@ -48,27 +54,28 @@ const App = () => {
   };
 
   const onConfigUpdate = (config: Configuration) => {
-    setState(reinitialize(config.level, config.verbsPerDay));
+    setState(reinitialize(props.storage, config.level, config.verbsPerDay));
   };
 
   function showSelection() {
     return (
       <>
-        <Choice currentSelection={state.selection} onSelect={onSelect} />
-        {state.selection !== Selection.NotSelected && (
-          <a href={"https://www.wanikani.com/vocabulary/" + state.verb.verb} target="_blank" rel="noreferrer" style={{textDecoration: "none"}}>
-            <Answer verb={state.verb} />
-          </a>
-        )}
         <Container>
+          <Choice currentSelection={state.selection} onSelect={onSelect} />
           <Button
             variant="contained"
+            disabled={state.selection === Selection.NotSelected}
             onClick={onContinue}
             startIcon={<NavigateNextIcon />}
           >
             Continue
           </Button>
         </Container>
+        {state.selection !== Selection.NotSelected && (
+          <a href={"https://www.wanikani.com/vocabulary/" + state.verb.verb} target="_blank" rel="noreferrer" style={{textDecoration: "none"}}>
+            <Answer verb={state.verb} />
+          </a>
+        )}
       </>
     );
   }
