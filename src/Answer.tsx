@@ -2,6 +2,7 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
+import { Highlight, ParticleHighlighter } from "./ParticleHighlighter";
 import { VerbDefinition } from "./Verbs";
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export const Answer = (props: Props) => {
+  const highlight = [ Highlight.Hide, Highlight.Hide, Highlight.Hide, Highlight.Hide, Highlight.Hide, Highlight.Hide, Highlight.Hide ];
   return (
     <Container>
       <Card>
@@ -27,7 +29,7 @@ export const Answer = (props: Props) => {
         {props.verb.examples.map((example) => (
           <CardContent key={example.en}>
             <Typography variant="h5" color="textSecondary">
-              {example.ja}
+              <ParticleHighlighter　text={example.ja} particles={example.indexes} highlight={highlight}/>
             </Typography>
             <Typography variant="h5" color="textSecondary">
               {example.en}

@@ -36,7 +36,7 @@ export const split = (text: string, particles: number[], highlights: Highlight[]
     const plaintext = text.substring(splits[i] + 1, splits[i + 1]);
     elements.push(plaintextNode(plaintext));
 
-    if (i < splits.length - 1) {
+    if (i < splits.length - 2) {
       const particle = text.charAt(particles[i]);
       elements.push(highlightNode(particle, highlights[i]));
     }

@@ -56,7 +56,7 @@ const App = () => {
       <>
         <Choice currentSelection={state.selection} onSelect={onSelect} />
         {state.selection !== Selection.NotSelected && (
-          <a href={"https://www.wanikani.com/vocabulary/" + state.verb.verb} target="_blank" style={{textDecoration: "none"}}>
+          <a href={"https://www.wanikani.com/vocabulary/" + state.verb.verb} target="_blank" rel="noreferrer" style={{textDecoration: "none"}}>
             <Answer verb={state.verb} />
           </a>
         )}

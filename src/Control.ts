@@ -21,7 +21,7 @@ export const DONE: VerbDefinition = {
   level: 0,
   transitive: false,
   types: [""],
-  examples: [{ en: "", ja: "" }],
+  examples: [{ en: "", ja: "", indexes: [] }],
   meanings: [{ meaning: "", primary: true, accepted_answer: true }],
   readings: [
     { reading: "Come back tomorrow.", primary: true, accepted_answer: true },
