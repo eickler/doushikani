@@ -60,21 +60,22 @@ const App = (props: Props) => {
   function showSelection() {
     return (
       <>
-        <Choice currentSelection={state.selection} onSelect={onSelect} />
-        {state.selection !== Selection.NotSelected && (
-          <a href={"https://www.wanikani.com/vocabulary/" + state.verb.verb} target="_blank" rel="noreferrer" style={{textDecoration: "none"}}>
-            <Answer verb={state.verb} />
-          </a>
-        )}
         <Container>
+          <Choice currentSelection={state.selection} onSelect={onSelect} />
           <Button
             variant="contained"
+            disabled={state.selection == Selection.NotSelected}
             onClick={onContinue}
             startIcon={<NavigateNextIcon />}
           >
             Continue
           </Button>
         </Container>
+        {state.selection !== Selection.NotSelected && (
+          <a href={"https://www.wanikani.com/vocabulary/" + state.verb.verb} target="_blank" rel="noreferrer" style={{textDecoration: "none"}}>
+            <Answer verb={state.verb} />
+          </a>
+        )}
       </>
     );
   }
