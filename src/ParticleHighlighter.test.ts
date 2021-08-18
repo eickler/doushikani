@@ -17,7 +17,7 @@ describe("Test particle highlighting", () => {
 
     expect(result.length).toBe(3);
     expect(result[0].props.children).toEqual("Typescript");
-    expect(result[1].props.children).toEqual("_");
+    expect(result[1].props.children).toEqual("?");
     expect(result[2].props.children).toEqual("好きです。");
   });
 

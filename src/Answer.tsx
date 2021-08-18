@@ -10,7 +10,15 @@ interface Props {
 }
 
 export const Answer = (props: Props) => {
-  const highlight = [ Highlight.Hide, Highlight.Hide, Highlight.Hide, Highlight.Hide, Highlight.Hide, Highlight.Hide, Highlight.Hide ];
+  const highlight = [
+    Highlight.Cursor,
+    Highlight.Correct,
+    Highlight.Wrong,
+    Highlight.Hide,
+    Highlight.Hide,
+    Highlight.Hide,
+    Highlight.Hide,
+  ];
   return (
     <Container>
       <Card>
@@ -21,7 +29,11 @@ export const Answer = (props: Props) => {
         </CardContent>
         <CardContent>
           {props.verb.meanings.map((meaning) => (
-            <Typography key={meaning.meaning} variant="h4" color={ meaning.primary ? "textPrimary" : "textSecondary"}>
+            <Typography
+              key={meaning.meaning}
+              variant="h4"
+              color={meaning.primary ? "textPrimary" : "textSecondary"}
+            >
               {meaning.meaning}
             </Typography>
           ))}
@@ -29,7 +41,11 @@ export const Answer = (props: Props) => {
         {props.verb.examples.map((example) => (
           <CardContent key={example.en}>
             <Typography variant="h5" color="textSecondary">
-              <ParticleHighlighter　text={example.ja} particles={example.indexes} highlight={highlight}/>
+              <ParticleHighlighter
+                text={example.ja}
+                particles={example.indexes}
+                highlight={highlight}
+              />
             </Typography>
             <Typography variant="h5" color="textSecondary">
               {example.en}

@@ -1,7 +1,9 @@
+import { ButtonGroup, Button } from "@material-ui/core";
 import { ReactElement, createElement } from "react";
 
 export enum Highlight {
   Hide,
+  Cursor,
   Correct,
   Wrong,
 }
@@ -12,24 +14,52 @@ interface Props {
   highlight: Highlight[];
 }
 
-const plaintextNode = (text: string) : ReactElement => {
-  return createElement('span', { children: text });
-}
+const plaintextNode = (text: string): ReactElement => {
+  return createElement("span", { children: text });
+};
 
-const highlightNode = (particle: string, highlight: Highlight) : ReactElement => {
+const highlightNode = (
+  particle: string,
+  highlight: Highlight
+): ReactElement => {
   switch (highlight) {
     case Highlight.Hide:
-      return createElement('span', { children: "_"});
+      return (
+        <ButtonGroup color="primary">
+          <Button>?</Button>
+        </ButtonGroup>
+      );
+    case Highlight.Cursor:
+      return (
+        <ButtonGroup color="primary">
+          <Button>は</Button>
+          <Button>が</Button>
+          <Button>を</Button>
+          <Button>に</Button>
+        </ButtonGroup>
+      );
     case Highlight.Correct:
-      return createElement('span', { children: particle, style: { color: "green" } });
+      return (
+        <ButtonGroup style={{color: "green"}}>
+          <Button>{particle}</Button>
+        </ButtonGroup>
+      );
     case Highlight.Wrong:
-      return createElement('span', { children: particle, style: { color: "green" } });
+      return (
+        <ButtonGroup style={{color: "red"}}>
+          <Button>{particle}</Button>
+        </ButtonGroup>
+      );
   }
-}
+};
 
-export const split = (text: string, particles: number[], highlights: Highlight[]) => {
+export const split = (
+  text: string,
+  particles: number[],
+  highlights: Highlight[]
+) => {
   let i = 0;
-  const splits = [ -1, ...particles, text.length];
+  const splits = [-1, ...particles, text.length];
   const elements = [];
 
   while (i < splits.length - 1) {
@@ -45,10 +75,8 @@ export const split = (text: string, particles: number[], highlights: Highlight[]
   }
 
   return elements;
-}
+};
 
 export const ParticleHighlighter = (props: Props) => {
-  return (
-    <>{split(props.text, props.particles, props.highlight)}</>
-  )
+  return <>{split(props.text, props.particles, props.highlight)}</>;
 };

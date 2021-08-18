@@ -25,7 +25,11 @@ interface State {
   selection: Selection;
 }
 
-const reinitialize = (storage: PersistentStorage, level: number, amount: number): State => {
+const reinitialize = (
+  storage: PersistentStorage,
+  level: number,
+  amount: number
+): State => {
   const flashcards = new Flashcards(storage);
   const control = new Control(flashcards, level, amount);
   return {
@@ -72,21 +76,20 @@ const App = (props: Props) => {
           </Button>
         </Container>
         {state.selection !== Selection.NotSelected && (
-          <a href={"https://www.wanikani.com/vocabulary/" + state.verb.verb} target="_blank" rel="noreferrer" style={{textDecoration: "none"}}>
-            <Answer verb={state.verb} />
-          </a>
+          <Answer verb={state.verb} />
         )}
       </>
     );
   }
 
-  return (
-    <>
-      <Setup
+  /*      <Setup
         defaultLevel={defaultLevel}
         defaultVerbsPerDay={defaultAmount}
         onConfigUpdate={onConfigUpdate}
       />
+*/
+  return (
+    <>
       <Question verb={state.verb} />
       {state.verb !== DONE && showSelection()}
     </>

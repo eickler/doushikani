@@ -10,6 +10,7 @@ export interface Props {
 
 export const Question = (props: Props) => {
   return (
+    <a href={"https://www.wanikani.com/vocabulary/" + props.verb.verb} target="_blank" rel="noreferrer" style={{textDecoration: "none"}}>
     <Container>
       <Card>
         <CardContent>
@@ -22,5 +23,6 @@ export const Question = (props: Props) => {
         </CardContent>
       </Card>
     </Container>
+    </a>
   );
 };

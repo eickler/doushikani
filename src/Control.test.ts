@@ -85,7 +85,7 @@ describe("Experimenting with verbs", () => {
     }
     console.log("-su verbs compliance " + suVerbs); // 115 to 5
     console.log("-aru verbs compliance " + aruVerbs); // 1 to 38
-    console.log("-meru verbs compliance " + meruVerbs); // 46 to 1
+    console.log("-meru verbs compliance " + meruVerbs); // 66 to 4
   });
 });
 */
