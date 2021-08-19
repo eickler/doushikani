@@ -1,35 +1,52 @@
 import { useState } from "react";
 import Intro from "./Intro";
-import App from "./App";
 import Goodbye from "./Goodbye";
 import { PersistentStorage } from "./PersistentStorage";
+import Splash from "./Splash";
+import ParticleRound from "./ParticleRound";
+import Summary from "./Summary";
+import VerbRound from "./VerbRound";
 
-enum Flow { Intro, Run, Goodbye }
+enum Step { Splash, Intro, VerbRound, ParticleRound, Summary, Goodbye }
 
 const storage = new PersistentStorage();
 
 const Main = () => {
-  const [state, setState] = useState(storage.shouldSkipIntro() ? Flow.Run : Flow.Intro);
+  const [state, setState] = useState(Step.Splash);
+
+  const onFinishSplash = () => {
+    setState(storage.shouldSkipIntro() ? Step.VerbRound : Step.Intro);
+  }
 
   const onFinishIntro = (skip: boolean) => {
     if (skip) {
       storage.skipIntroNextTime();
     }
-    setState(Flow.Run);
+    setState(Step.VerbRound);
   };
 
-  const onFinishApp = () => {
-    setState(Flow.Goodbye);
-  };
-
-  switch (state) {
-    case Flow.Intro:
-      return (<Intro onFinish={onFinishIntro}/>);
-    case Flow.Run:
-      return (<App storage={storage} onFinish={onFinishApp}/>);
-    case Flow.Goodbye:
-      return (<Goodbye/>);
+  const onFinishVerbRound = () => {
+    setState(Step.ParticleRound);
   }
+
+  const onFinishParticleRound = () => {
+    setState(Step.Summary);
+  }
+
+  const onFinishSummary = (repeat: boolean) => {
+    setState(repeat ? Step.VerbRound : Step.Goodbye);
+  }
+  
+  const flow = {
+    [Step.Splash]: (<Splash onFinish={onFinishSplash}/>),
+    [Step.Intro]:  (<Intro onFinish={onFinishIntro}/>),
+    [Step.VerbRound]: (<VerbRound onFinish={onFinishVerbRound}/>),
+    [Step.ParticleRound]: (<ParticleRound onFinish={onFinishParticleRound}/>),
+    [Step.Summary]: (<Summary onFinish={onFinishSummary}/>),
+    [Step.Goodbye]: (<Goodbye/>),
+  }
+
+  return flow[state];
 };
 
 export default Main;
