@@ -1,12 +1,7 @@
 import { Flashcard } from './Flashcard';
 
 const MARKER = '動詞 ';
-const DAY_KEY = '動詞Day';
 const SKIP_INTRO_KEY = '動詞Intro';
-
-const today = () => {
-  return new Date().setHours(0, 0, 0, 0);
-}
 
 export class PersistentStorage {
   storage: Storage;
@@ -32,15 +27,6 @@ export class PersistentStorage {
       }
     }
     return cards;
-  }
-
-  gotNewCards() {
-    this.storage.setItem(DAY_KEY, today().toString());
-  }
-
-  shouldGetNewCards() : boolean {
-    const lastSet = Number(this.storage.getItem(DAY_KEY));
-    return today() > lastSet;
   }
 
   skipIntroNextTime() {

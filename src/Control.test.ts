@@ -33,7 +33,7 @@ describe("Test flashcards", () => {
     expect(control.cards["上げる"].card.item.repetition).toBe(0);
   });
 
-  it("Shoudl pull due cards if there are due cards", () => {
+  it("Should pull due cards if there are due cards", () => {
     const card = flashcards.add("入る");
 
     const nbrToLearn = 1;

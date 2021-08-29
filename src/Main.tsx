@@ -2,51 +2,84 @@ import { useState } from "react";
 import Intro from "./Intro";
 import Goodbye from "./Goodbye";
 import { PersistentStorage } from "./PersistentStorage";
-import Splash from "./Splash";
-import ParticleRound from "./ParticleRound";
+import Logo from "./Logo";
+import ParticleRounds from "./ParticleRounds";
 import Summary from "./Summary";
-import VerbRound from "./VerbRound";
+import VerbRounds from "./VerbRounds";
+import { Control, VerbCard } from "./Control";
+import { Flashcards } from "./Flashcards";
+import GetReadyFor from "./GetReady";
 
-enum Step { Splash, Intro, VerbRound, ParticleRound, Summary, Goodbye }
+const defaultLevel = 20;
+const defaultAmount = 3;
+
+enum Step { Splash, Intro, VerbSplash, VerbRound, ParticleSplash, ParticleRound, Summary, Goodbye };
+
+interface State {
+  step: Step;
+  verbs: VerbCard[];
+  control?: Control;
+}
 
 const storage = new PersistentStorage();
+const flashcards = new Flashcards(storage);
+const initState : State = { step: Step.Splash, verbs: []}; 
 
 const Main = () => {
-  const [state, setState] = useState(Step.Splash);
+  const [state, setState] = useState(initState);
 
-  const onFinishSplash = () => {
-    setState(storage.shouldSkipIntro() ? Step.VerbRound : Step.Intro);
+  const next = (step: Step) => {
+    setState({ ...state, step: step });
   }
 
-  const onFinishIntro = (skip: boolean) => {
+  const gotoIntroOrVerbSplash = () => {
+    next(storage.shouldSkipIntro() ? Step.VerbSplash : Step.Intro);
+  }
+
+  const gotoVerbSplash = (skip: boolean) => {
     if (skip) {
       storage.skipIntroNextTime();
     }
-    setState(Step.VerbRound);
+    const control = new Control(flashcards, defaultLevel, defaultAmount);
+    const verbs = control.getCards();
+    setState({step: Step.VerbSplash, verbs: verbs, control: control});
+  }
+
+  const gotoVerbRound = () => {
+    next(Step.VerbRound);
   };
 
-  const onFinishVerbRound = () => {
-    setState(Step.ParticleRound);
+  const gotoParticleSplash = (result: boolean[]) => {
+    for (let i = 0; i < result.length; i++) {
+      state.control?.result(state.verbs[i].verb.verb, result[i]);
+    }
+    next(Step.ParticleSplash);
   }
 
-  const onFinishParticleRound = () => {
-    setState(Step.Summary);
+  const gotoParticleRound = () => {
+    next(Step.ParticleRound);
   }
 
-  const onFinishSummary = (repeat: boolean) => {
-    setState(repeat ? Step.VerbRound : Step.Goodbye);
+  const gotoSummary = () => {
+    next(Step.Summary);
+  }
+
+  const gotoVerbSplashOrSummary = (repeat: boolean) => {
+    next(repeat ? Step.VerbSplash : Step.Goodbye);
   }
   
   const flow = {
-    [Step.Splash]: (<Splash onFinish={onFinishSplash}/>),
-    [Step.Intro]:  (<Intro onFinish={onFinishIntro}/>),
-    [Step.VerbRound]: (<VerbRound onFinish={onFinishVerbRound}/>),
-    [Step.ParticleRound]: (<ParticleRound onFinish={onFinishParticleRound}/>),
-    [Step.Summary]: (<Summary onFinish={onFinishSummary}/>),
+    [Step.Splash]: (<Logo onFinish={gotoIntroOrVerbSplash}/>),
+    [Step.Intro]:  (<Intro onFinish={gotoVerbSplash}/>),
+    [Step.VerbSplash]: (<GetReadyFor what="verbs" onFinish={gotoVerbRound}/>),
+    [Step.VerbRound]: (<VerbRounds verbs={state.verbs} onFinish={gotoParticleSplash}/>),
+    [Step.ParticleSplash]: (<GetReadyFor what="particles" onFinish={gotoParticleRound}/>),
+    [Step.ParticleRound]: (<ParticleRounds verbs={state.verbs} onFinish={gotoSummary}/>),
+    [Step.Summary]: (<Summary onFinish={gotoVerbSplashOrSummary}/>),
     [Step.Goodbye]: (<Goodbye/>),
   }
 
-  return flow[state];
+  return flow[state.step];
 };
 
 export default Main;

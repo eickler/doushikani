@@ -87,16 +87,16 @@ const Intro = (props: Props) => {
       </Typography>
       <Typography variant="body1" paragraph>
         There are two "mostly true" rules:
-        <ul>
-          <li>
-            Nearly all verbs ending with "-aru" (-maru/-garu/...) are
-            intransitive.
-          </li>
-          <li>
-            Nearly all verbs ending with "-su", "-meru", "-beru", "-teru" and
-            "-seru" are transitive.
-          </li>
-        </ul>
+      </Typography>
+      <Typography variant="body1" component="ul" paragraph>
+        <li>
+          Nearly all verbs ending with "-aru" (-maru/-garu/...) are
+          intransitive.
+        </li>
+        <li>
+          Nearly all verbs ending with "-su", "-meru", "-beru", "-teru" and
+          "-seru" are transitive.
+        </li>
       </Typography>
       <Typography variant="body1" paragraph>
         Wanikani has more than 800 verbs in its dictionary. 229 verbs match the

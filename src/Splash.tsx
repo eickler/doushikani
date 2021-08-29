@@ -1,7 +1,8 @@
-import { Grow, Grid, Typography } from "@material-ui/core";
-import { ReactComponent as Logo } from "./assets/doushikani.svg";
+import { Grow, Grid } from "@material-ui/core";
+import { ReactChild } from "react";
 
 interface Props {
+  children: ReactChild | ReactChild[];
   onFinish: () => void;
 }
 
@@ -19,8 +20,7 @@ const Splash = (props: Props) => {
     >
       <Grow in timeout={1000}>
         <Grid item xs={12}>
-          <Logo />
-          <Typography variant="h2">doushikani</Typography>
+          {props.children}
         </Grid>
       </Grow>
     </Grid>

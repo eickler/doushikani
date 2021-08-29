@@ -12,6 +12,7 @@ interface Props {
   text: string;
   particles: number[];
   highlight: Highlight[];
+  onSelect: (guessed: string) => void;
 }
 
 const plaintextNode = (text: string): ReactElement => {
@@ -20,34 +21,35 @@ const plaintextNode = (text: string): ReactElement => {
 
 const highlightNode = (
   particle: string,
-  highlight: Highlight
+  highlight: Highlight,
+  onSelect: (guessed: string) => void
 ): ReactElement => {
   switch (highlight) {
     case Highlight.Hide:
       return (
-        <ButtonGroup color="primary">
-          <Button>?</Button>
+        <ButtonGroup>
+          <Button color="primary" disabled>?</Button>
         </ButtonGroup>
       );
     case Highlight.Cursor:
       return (
-        <ButtonGroup color="primary">
-          <Button>は</Button>
-          <Button>が</Button>
-          <Button>を</Button>
-          <Button>に</Button>
+        <ButtonGroup>
+          <Button color="primary" onClick={() => onSelect("は")}>は</Button>
+          <Button color="primary" onClick={() => onSelect("が")}>が</Button>
+          <Button color="primary" onClick={() => onSelect("を")}>を</Button>
+          <Button color="primary" onClick={() => onSelect("に")}>に</Button>
         </ButtonGroup>
       );
     case Highlight.Correct:
       return (
-        <ButtonGroup style={{color: "green"}}>
-          <Button>{particle}</Button>
+        <ButtonGroup>
+          <Button style={{ color: "green" }} disabled>{particle}</Button>
         </ButtonGroup>
       );
     case Highlight.Wrong:
       return (
-        <ButtonGroup style={{color: "red"}}>
-          <Button>{particle}</Button>
+        <ButtonGroup>
+          <Button style={{ color: "red" }} disabled>{particle}</Button>
         </ButtonGroup>
       );
   }
@@ -56,7 +58,8 @@ const highlightNode = (
 export const split = (
   text: string,
   particles: number[],
-  highlights: Highlight[]
+  highlights: Highlight[],
+  onSelect: (guessed: string) => void
 ) => {
   let i = 0;
   const splits = [-1, ...particles, text.length];
@@ -68,7 +71,7 @@ export const split = (
 
     if (i < splits.length - 2) {
       const particle = text.charAt(particles[i]);
-      elements.push(highlightNode(particle, highlights[i]));
+      elements.push(highlightNode(particle, highlights[i], onSelect));
     }
 
     i++;
@@ -78,5 +81,7 @@ export const split = (
 };
 
 export const ParticleHighlighter = (props: Props) => {
-  return <>{split(props.text, props.particles, props.highlight)}</>;
+  return (
+    <>{split(props.text, props.particles, props.highlight, props.onSelect)}</>
+  );
 };

@@ -1,4 +1,4 @@
-interface Example {
+export interface Example {
   en: string;
   ja: string;
   indexes: number[];
