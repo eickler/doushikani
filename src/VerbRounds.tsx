@@ -14,6 +14,7 @@ interface State {
 const initState: State = { round: 0, result: [] };
 
 // The rounds management could be factored out into a generic rounds handling wrapper component
+// --> But how??
 const VerbRounds = ({ verbs, onFinish }: Props) => {
   const [state, setState] = useState(initState);
 

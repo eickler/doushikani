@@ -28,11 +28,18 @@ interface State {
   step: Step;
   verbs: VerbCard[];
   control?: Control;
+  verbsResult: boolean[];
+  particlesResult: boolean[];
 }
 
 const storage = new PersistentStorage();
 const flashcards = new Flashcards(storage);
-const initState: State = { step: Step.Splash, verbs: [] };
+const initState: State = {
+  step: Step.Splash,
+  verbs: [],
+  verbsResult: [],
+  particlesResult: [],
+};
 
 const Main = () => {
   const [state, setState] = useState(initState);
@@ -55,22 +62,27 @@ const Main = () => {
   const gotoVerbRound = () => {
     const control = new Control(flashcards, defaultLevel, defaultAmount);
     const verbs = control.getCards();
-    setState({ step: Step.VerbRound, verbs: verbs, control: control });
+    setState({
+      ...state,
+      step: Step.VerbRound,
+      verbs: verbs,
+      control: control,
+    });
   };
 
   const gotoParticleSplash = (result: boolean[]) => {
     for (let i = 0; i < result.length; i++) {
       state.control?.result(state.verbs[i].verb.verb, result[i]);
     }
-    next(Step.ParticleSplash);
+    setState({ ...state, step: Step.ParticleSplash, verbsResult: result });
   };
 
   const gotoParticleRound = () => {
     next(Step.ParticleRound);
   };
 
-  const gotoSummary = () => {
-    next(Step.Summary);
+  const gotoSummary = (result: boolean[]) => {
+    setState({ ...state, step: Step.Summary, particlesResult: result });
   };
 
   const gotoVerbSplashOrSummary = (repeat: boolean) => {
@@ -85,7 +97,7 @@ const Main = () => {
     [Step.VerbRound]: (<VerbRounds verbs={state.verbs} onFinish={gotoParticleSplash}/>),
     [Step.ParticleSplash]: (<GetReadyFor what="particles" onFinish={gotoParticleRound}/>),
     [Step.ParticleRound]: (<ParticleRounds verbs={state.verbs} onFinish={gotoSummary}/>),
-    [Step.Summary]: (<Summary onFinish={gotoVerbSplashOrSummary}/>),
+    [Step.Summary]: (<Summary verbsResult={state.verbsResult} particlesResult={state.particlesResult} onFinish={gotoVerbSplashOrSummary}/>),
     [Step.Goodbye]: (<Goodbye/>),
   }
 

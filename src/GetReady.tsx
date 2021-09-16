@@ -7,12 +7,10 @@ interface Props {
 }
 
 const GetReadyFor = (props: Props) => {
-  setTimeout(props.onFinish, 3000);
-
   return (
     <Splash onFinish={props.onFinish}>
       <Typography variant="h2">Get ready for {props.what}!</Typography>
-      <audio autoPlay src={process.env.PUBLIC_URL + "/assets/chime.mp3"}/>
+      <audio autoPlay src={process.env.PUBLIC_URL + "/assets/chime.mp3"} />
     </Splash>
   );
 };

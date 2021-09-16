@@ -7,8 +7,6 @@ interface Props {
 }
 
 const Logo = (props: Props) => {
-  setTimeout(props.onFinish, 3000);
-
   return (
     <Splash onFinish={props.onFinish}>
       <Crab />
