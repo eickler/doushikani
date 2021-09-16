@@ -1,60 +1,57 @@
-import { Container } from "@material-ui/core";
 import { useState } from "react";
+import { Container } from "@material-ui/core";
 import { Highlight, ParticleHighlighter } from "./ParticleHighlighter";
-import { VerbDefinition, Example } from "./Verbs";
-import { VerbCard } from "./Control";
+import { Example } from "./Verbs";
 
 interface Props {
-  verb: VerbCard;
+  example: Example;
   onFinish: (pass: boolean) => void;
 }
-
 interface State {
-  example: Example;
   cursor: number;
-  highlight: Highlight[];
+  highlights: Highlight[];
 }
 
-const initState = (verb: VerbDefinition): State => {
-  const example =
-    verb.examples[Math.floor(Math.random() * verb.examples.length)];
-  const result = { example: example, cursor: 0, highlight: [Highlight.Cursor] };
-  for (let i = 1; i < example.indexes.length; i++) {
-    result.highlight.push(Highlight.Hide);
-  }
-  return result;
-};
+const initState: State = { cursor: 0, highlights: [Highlight.Cursor] };
 
-const ParticleRound = (props: Props) => {
-  const [state, setState] = useState(initState(props.verb.verb));
+const ParticleRound = ({ example, onFinish }: Props) => {
+  const [state, setState] = useState(initState);
+
+  const moveCursor = (highlights: Highlight[]) => {
+    highlights.push(Highlight.Cursor);
+    setState({
+      cursor: state.cursor + 1,
+      highlights: highlights,
+    });
+  };
+
+  const resetAndNotify = (highlights: Highlight[]) => {
+    setState(initState);
+    const passed = highlights.every((h) => h === Highlight.Correct);
+    onFinish(passed);
+  };
 
   const onSelect = (guessed: string) => {
-    const newState = {
-      example: state.example,
-      cursor: state.cursor + 1,
-      highlight: [...state.highlight],
-    };
+    const highlights = [...state.highlights];
 
-    const correct = state.example.ja.charAt(state.example.indexes[state.cursor]);
-    newState.highlight[state.cursor] =
+    const correct = example.ja.charAt(example.indexes[state.cursor]);
+    highlights[state.cursor] =
       guessed === correct ? Highlight.Correct : Highlight.Wrong;
 
-    if (newState.cursor >= newState.highlight.length) {
-      const passed = newState.highlight.every((h) => h === Highlight.Correct);
-      props.onFinish(passed);
+    if (state.cursor < example.indexes.length - 1) {
+      moveCursor(highlights);
     } else {
-      newState.highlight[newState.cursor] = Highlight.Cursor;
+      resetAndNotify(highlights);
     }
-    setState(newState);
   };
 
   return (
     <Container>
       <ParticleHighlighter
         onSelect={onSelect}
-        text={state.example.ja}
-        particles={state.example.indexes}
-        highlight={state.highlight}
+        text={example.ja}
+        particles={example.indexes}
+        highlight={state.highlights}
       />
     </Container>
   );

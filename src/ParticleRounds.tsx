@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ParticleRound from "./ParticleRound";
 import { VerbCard } from "./Control";
+import { Example } from "./Verbs";
 
 interface Props {
   verbs: VerbCard[];
@@ -8,29 +9,44 @@ interface Props {
 }
 
 interface State {
+  example: Example;
   round: number;
   result: boolean[];
 }
-const initState : State = { round: 0, result: [] };
 
-const ParticleRounds = (props: Props) => {
+const ParticleRounds = ({ verbs, onFinish }: Props) => {
+  const pick = (round: number): Example => {
+    const verb = verbs[round].verb;
+    return verb.examples[Math.floor(Math.random() * verb.examples.length)];
+  };
+
+  const initState = (): State => {
+    return { example: pick(0), round: 0, result: [] };
+  };
+
   const [state, setState] = useState(initState);
 
-  const nextRound = (pass: boolean) => {
-    const newState = {
-      round: state.round + 1,
-      result: [ ...state.result, pass ]
-    };
-    if (newState.round < props.verbs.length) {
-      setState(newState);
+  const nextRound = (result: boolean[]) => {
+    const round = state.round + 1;
+    setState({ example: pick(round), round: round, result: result });
+  };
+
+  const resetAndNotify = (result: boolean[]) => {
+    setState(initState);
+    onFinish(result);
+  };
+
+  const proceed = (pass: boolean) => {
+    const result = [...state.result, pass];
+
+    if (state.round < verbs.length - 1) {
+      nextRound(result);
     } else {
-      setState(initState);
-      props.onFinish(newState.result);
+      resetAndNotify(result);
     }
   };
 
-  // There should be a new instance of this every time ... ?
-  return <ParticleRound verb={props.verbs[state.round]} onFinish={nextRound} />;
+  return <ParticleRound example={state.example} onFinish={proceed} />;
 };
 
 export default ParticleRounds;

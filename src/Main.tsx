@@ -13,7 +13,16 @@ import GetReadyFor from "./GetReady";
 const defaultLevel = 20;
 const defaultAmount = 3;
 
-enum Step { Splash, Intro, VerbSplash, VerbRound, ParticleSplash, ParticleRound, Summary, Goodbye };
+enum Step {
+  Splash,
+  Intro,
+  VerbSplash,
+  VerbRound,
+  ParticleSplash,
+  ParticleRound,
+  Summary,
+  Goodbye,
+}
 
 interface State {
   step: Step;
@@ -23,30 +32,30 @@ interface State {
 
 const storage = new PersistentStorage();
 const flashcards = new Flashcards(storage);
-const initState : State = { step: Step.Splash, verbs: []}; 
+const initState: State = { step: Step.Splash, verbs: [] };
 
 const Main = () => {
   const [state, setState] = useState(initState);
 
   const next = (step: Step) => {
     setState({ ...state, step: step });
-  }
+  };
 
   const gotoIntroOrVerbSplash = () => {
     next(storage.shouldSkipIntro() ? Step.VerbSplash : Step.Intro);
-  }
+  };
 
   const gotoVerbSplash = (skip: boolean) => {
     if (skip) {
       storage.skipIntroNextTime();
     }
-    const control = new Control(flashcards, defaultLevel, defaultAmount);
-    const verbs = control.getCards();
-    setState({step: Step.VerbSplash, verbs: verbs, control: control});
-  }
+    next(Step.VerbSplash);
+  };
 
   const gotoVerbRound = () => {
-    next(Step.VerbRound);
+    const control = new Control(flashcards, defaultLevel, defaultAmount);
+    const verbs = control.getCards();
+    setState({ step: Step.VerbRound, verbs: verbs, control: control });
   };
 
   const gotoParticleSplash = (result: boolean[]) => {
@@ -54,20 +63,21 @@ const Main = () => {
       state.control?.result(state.verbs[i].verb.verb, result[i]);
     }
     next(Step.ParticleSplash);
-  }
+  };
 
   const gotoParticleRound = () => {
     next(Step.ParticleRound);
-  }
+  };
 
   const gotoSummary = () => {
     next(Step.Summary);
-  }
+  };
 
   const gotoVerbSplashOrSummary = (repeat: boolean) => {
     next(repeat ? Step.VerbSplash : Step.Goodbye);
-  }
-  
+  };
+
+  // prettier-ignore
   const flow = {
     [Step.Splash]: (<Logo onFinish={gotoIntroOrVerbSplash}/>),
     [Step.Intro]:  (<Intro onFinish={gotoVerbSplash}/>),

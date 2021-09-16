@@ -11,7 +11,9 @@ interface Props {
 
 const VerbRound = (props: Props) => {
   const [selection, setSelection] = useState(Selection.NotSelected);
-  const correctChoice = props.verb.verb.transitive ? Selection.Transitive : Selection.Intransitive;
+  const correctChoice = props.verb.verb.transitive
+    ? Selection.Transitive
+    : Selection.Intransitive;
 
   const onSelected = (selection: Selection) => {
     setSelection(selection);
@@ -19,14 +21,20 @@ const VerbRound = (props: Props) => {
       setSelection(Selection.NotSelected);
       props.onFinish(selection === correctChoice);
     }, 3000);
-  }
+  };
 
   return (
     <Container>
-       <Question verb={props.verb.verb} />
-       <Choice currentChoice={selection} correctChoice={correctChoice} onSelected={onSelected}/>
-       <Typography variant="h4">
-        This verb is: {(selection !== Selection.NotSelected && Selection[correctChoice]) || "..."}
+      <Question verb={props.verb.verb} />
+      <Choice
+        currentChoice={selection}
+        correctChoice={correctChoice}
+        onSelected={onSelected}
+      />
+      <Typography variant="h4">
+        This verb is:{" "}
+        {(selection !== Selection.NotSelected && Selection[correctChoice]) ||
+          "..."}
       </Typography>
     </Container>
   );
