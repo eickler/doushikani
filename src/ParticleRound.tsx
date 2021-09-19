@@ -1,5 +1,5 @@
+import { Container, Typography } from "@material-ui/core";
 import { useState } from "react";
-import { Container } from "@material-ui/core";
 import { Highlight, ParticleHighlighter } from "./ParticleHighlighter";
 import { Example } from "./Verbs";
 
@@ -31,6 +31,11 @@ const ParticleRound = ({ example, onFinish }: Props) => {
     onFinish(passed);
   };
 
+  const waitResetAndNotify = (highlights: Highlight[]) => {
+    setState({ ...state, highlights: highlights });
+    setTimeout(() => resetAndNotify(highlights), 3000);
+  };
+
   const onSelect = (guessed: string) => {
     const highlights = [...state.highlights];
 
@@ -41,18 +46,21 @@ const ParticleRound = ({ example, onFinish }: Props) => {
     if (state.cursor < example.indexes.length - 1) {
       moveCursor(highlights);
     } else {
-      resetAndNotify(highlights);
+      waitResetAndNotify(highlights);
     }
   };
 
   return (
-    <Container>
-      <ParticleHighlighter
-        onSelect={onSelect}
-        text={example.ja}
-        particles={example.indexes}
-        highlight={state.highlights}
-      />
+    <Container maxWidth="md">
+      <Typography variant="h4">
+        <ParticleHighlighter
+          onSelect={onSelect}
+          text={example.ja}
+          particles={example.indexes}
+          highlight={state.highlights}
+        />
+        {state.highlights[state.cursor] != Highlight.Cursor && example.en}
+      </Typography>
     </Container>
   );
 };

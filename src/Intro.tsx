@@ -8,7 +8,6 @@ import {
 } from "@material-ui/core";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@material-ui/icons";
 import { useState } from "react";
-import SwipeableViews from "react-swipeable-views";
 
 interface Props {
   onFinish: (skip: boolean) => void;
@@ -136,15 +135,7 @@ const Intro = (props: Props) => {
   return (
     <Box height="100vh" display="flex" flexDirection="column">
       <Box flex={1} overflow="auto" style={{ margin: "20px" }}>
-        <SwipeableViews
-          index={activeStep}
-          onChangeIndex={handleStepChange}
-          enableMouseEvents
-        >
-          {steps.map((step, index) => (
-            <div key={index}>{step}</div>
-          ))}
-        </SwipeableViews>
+        {steps[activeStep]}
       </Box>
       <Box>
         <MobileStepper
