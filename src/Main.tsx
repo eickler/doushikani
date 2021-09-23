@@ -34,11 +34,22 @@ interface State {
 
 const storage = new PersistentStorage();
 const flashcards = new Flashcards(storage);
-const initState: State = {
-  step: Step.Splash,
-  verbs: [],
-  verbsResult: [],
-  particlesResult: [],
+const initState = (): State => {
+  /*const control = new Control(flashcards, defaultLevel, defaultAmount);
+  const verbs = control.getCards();
+  return {
+    step: Step.ParticleRound,
+    verbs: verbs,
+    control: control,
+    verbsResult: [],
+    particlesResult: [],
+  };*/
+  return {
+    step: Step.Splash,
+    verbs: [],
+    verbsResult: [],
+    particlesResult: [],
+  };
 };
 
 const Main = () => {

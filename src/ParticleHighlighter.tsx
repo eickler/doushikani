@@ -1,5 +1,5 @@
-import { ButtonGroup, Button } from "@material-ui/core";
-import { ReactElement, createElement } from "react";
+import { ButtonGroup, Button, Typography, Grid } from "@material-ui/core";
+import { ReactElement } from "react";
 
 export enum Highlight {
   Hide,
@@ -16,10 +16,15 @@ interface Props {
 }
 
 const plaintextNode = (text: string): ReactElement => {
-  return createElement("span", { children: text, key: text });
+  return (
+    <Typography variant="h4" component="span" key={text}>
+      {text}
+    </Typography>
+  );
 };
 
 const highlightNode = (
+  i: number,
   particle: string,
   highlight: Highlight,
   onSelect: (guessed: string) => void
@@ -27,42 +32,61 @@ const highlightNode = (
   switch (highlight) {
     case Highlight.Hide:
       return (
-        <ButtonGroup data-id="hidden" key="hidden">
+        <ButtonGroup variant="contained" data-id="hidden" key={"hidden-" + i}>
           <Button color="primary" disabled>
-            ?
+            <Typography variant="h4" component="span">
+              ?
+            </Typography>
           </Button>
         </ButtonGroup>
       );
     case Highlight.Cursor:
       return (
-        <ButtonGroup data-id="cursor" key="cursor">
+        <ButtonGroup
+          variant="contained"
+          data-id="cursor"
+          key={"cursor" + i}
+          orientation="vertical"
+        >
           <Button color="primary" onClick={() => onSelect("は")}>
-            は
+            <Typography variant="h4" component="span">
+              は
+            </Typography>
           </Button>
           <Button color="primary" onClick={() => onSelect("が")}>
-            が
+            <Typography variant="h4" component="span">
+              が
+            </Typography>
           </Button>
           <Button color="primary" onClick={() => onSelect("を")}>
-            を
+            <Typography variant="h4" component="span">
+              を
+            </Typography>
           </Button>
           <Button color="primary" onClick={() => onSelect("に")}>
-            に
+            <Typography variant="h4" component="span">
+              に
+            </Typography>
           </Button>
         </ButtonGroup>
       );
     case Highlight.Correct:
       return (
-        <ButtonGroup data-id="correct" key="green">
+        <ButtonGroup data-id="correct" key={"green" + i}>
           <Button style={{ color: "green" }} disabled>
-            {particle}
+            <Typography variant="h4" component="span">
+              {particle}
+            </Typography>
           </Button>
         </ButtonGroup>
       );
     case Highlight.Wrong:
       return (
-        <ButtonGroup data-id="wrong" key="red">
+        <ButtonGroup data-id="wrong" key={"red" + i}>
           <Button style={{ color: "red" }} disabled>
-            {particle}
+            <Typography variant="h4" component="span">
+              {particle}
+            </Typography>
           </Button>
         </ButtonGroup>
       );
@@ -86,7 +110,7 @@ export const split = (
     if (i < splits.length - 2) {
       const particle = text.charAt(particles[i]);
       const highlight = i < highlights.length ? highlights[i] : Highlight.Hide;
-      elements.push(highlightNode(particle, highlight, onSelect));
+      elements.push(highlightNode(i, particle, highlight, onSelect));
     }
 
     i++;
@@ -97,6 +121,8 @@ export const split = (
 
 export const ParticleHighlighter = (props: Props) => {
   return (
-    <>{split(props.text, props.particles, props.highlight, props.onSelect)}</>
+    <Grid container direction="row" justifyContent="center" alignItems="center">
+      {split(props.text, props.particles, props.highlight, props.onSelect)}
+    </Grid>
   );
 };

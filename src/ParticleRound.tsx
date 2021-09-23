@@ -1,4 +1,4 @@
-import { Container, Typography } from "@material-ui/core";
+import { Card, Grid, Typography } from "@material-ui/core";
 import { useState } from "react";
 import { Highlight, ParticleHighlighter } from "./ParticleHighlighter";
 import { Example } from "./Verbs";
@@ -40,6 +40,9 @@ const ParticleRound = ({ example, onFinish }: Props) => {
     const highlights = [...state.highlights];
 
     const correct = example.ja.charAt(example.indexes[state.cursor]);
+    const feedback = correct ? "/assets/success.mp3" : "/assets/fail.mp3";
+    new Audio(process.env.PUBLIC_URL + feedback).play();
+
     highlights[state.cursor] =
       guessed === correct ? Highlight.Correct : Highlight.Wrong;
 
@@ -51,17 +54,45 @@ const ParticleRound = ({ example, onFinish }: Props) => {
   };
 
   return (
-    <Container maxWidth="md">
-      <Typography variant="h4">
-        <ParticleHighlighter
-          onSelect={onSelect}
-          text={example.ja}
-          particles={example.indexes}
-          highlight={state.highlights}
-        />
-        {state.highlights[state.cursor] != Highlight.Cursor && example.en}
-      </Typography>
-    </Container>
+    <Grid
+      container
+      alignItems="center"
+      justifyContent="center"
+      style={{ minHeight: "100vh" }}
+    >
+      <Card>
+        <Grid
+          container
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+          style={{ minHeight: "80vh", minWidth: "80vh" }}
+        >
+          <Grid item>
+            <ParticleHighlighter
+              onSelect={onSelect}
+              text={example.ja}
+              particles={example.indexes}
+              highlight={state.highlights}
+            />
+          </Grid>
+          <Grid item>
+            <Typography
+              variant="h4"
+              style={{
+                visibility:
+                  state.highlights[state.cursor] !== Highlight.Cursor &&
+                  example.en
+                    ? "visible"
+                    : "hidden",
+              }}
+            >
+              {example.en}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Card>
+    </Grid>
   );
 };
 

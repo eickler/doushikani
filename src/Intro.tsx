@@ -128,10 +128,6 @@ const Intro = (props: Props) => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleStepChange = (step: number) => {
-    setActiveStep(step);
-  };
-
   return (
     <Box height="100vh" display="flex" flexDirection="column">
       <Box flex={1} overflow="auto" style={{ margin: "20px" }}>

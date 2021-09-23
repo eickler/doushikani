@@ -11,11 +11,13 @@ def search_particles(verbs):
             for token in doc:
                 if token.pos_ != 'ADP':
                     continue
-                if token.text not in ['は','が','を','に']:
+                if token.text not in ['は', 'が', 'を', 'に']:
                     continue
                 if token.dep_ not in ['case', 'fixed', 'advcl']:
                     continue
                 example['indexes'].append(token.idx)
+        verb['examples'] = [example for example in verb['examples']
+                            if len(example['indexes']) > 0]
 
 
 verbs = json.load(open('../src/verbs.json', 'r'))

@@ -2,6 +2,7 @@ import { useState } from "react";
 import ParticleRound from "./ParticleRound";
 import { VerbCard } from "./Control";
 import { Example } from "./Verbs";
+import { Box, LinearProgress } from "@material-ui/core";
 
 interface Props {
   verbs: VerbCard[];
@@ -46,7 +47,19 @@ const ParticleRounds = ({ verbs, onFinish }: Props) => {
     }
   };
 
-  return <ParticleRound example={state.example} onFinish={proceed} />;
+  return (
+    <Box height="100vh" display="flex" flexDirection="column">
+      <Box flex={1} overflow="auto" style={{ margin: "20px" }}>
+        <ParticleRound example={state.example} onFinish={proceed} />{" "}
+      </Box>
+      <Box>
+        <LinearProgress
+          variant="determinate"
+          value={(100 * state.round) / verbs.length}
+        />
+      </Box>
+    </Box>
+  );
 };
 
 export default ParticleRounds;
