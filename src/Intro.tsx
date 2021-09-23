@@ -130,7 +130,7 @@ const Intro = (props: Props) => {
 
   return (
     <Box height="100vh" display="flex" flexDirection="column">
-      <Box flex={1} overflow="auto" style={{ margin: "20px" }}>
+      <Box flex={1} overflow="auto">
         {steps[activeStep]}
       </Box>
       <Box>
