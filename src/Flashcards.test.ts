@@ -17,14 +17,14 @@ describe("Test flashcards", () => {
   });
 
   it("Should be initially empty", () => {
-    expect(flashcards.available('verb')).toBeTruthy();
+    expect(flashcards.cardStoredFor('verb')).toBeFalsy();
     expect(flashcards.dueCards.length).toBe(0);
   });
 
   it("Should present a newly added card", () => {
     flashcards.add('verb');
 
-    expect(flashcards.available('verb')).toBeFalsy();
+    expect(flashcards.cardStoredFor('verb')).toBeTruthy();
     const dueCards = flashcards.dueCards();
     expect(Object.keys(dueCards).length).toBe(1);
     expect(dueCards['verb']).toBeTruthy();

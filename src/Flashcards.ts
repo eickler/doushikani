@@ -21,8 +21,8 @@ export class Flashcards {
     this.storage = storage;
   }
 
-  available(verb: string) : boolean {
-    return this.storage.get(verb) === null;
+  cardStoredFor(verb: string) : boolean {
+    return this.storage.get(verb) !== null;
   }
 
   dueCards() : Record<string,Flashcard> {
