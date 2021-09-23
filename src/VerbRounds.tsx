@@ -40,7 +40,7 @@ const VerbRounds = ({ verbs, onFinish }: Props) => {
 
   return (
     <Box height="100vh" display="flex" flexDirection="column">
-      <Box flex={1} overflow="auto" style={{ margin: "20px" }}>
+      <Box flex={1} overflow="auto">
         <VerbRound verb={verbs[state.round]} onFinish={proceed} />
       </Box>
       <Box>

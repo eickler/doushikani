@@ -49,7 +49,7 @@ const ParticleRounds = ({ verbs, onFinish }: Props) => {
 
   return (
     <Box height="100vh" display="flex" flexDirection="column">
-      <Box flex={1} overflow="auto" style={{ margin: "20px" }}>
+      <Box flex={1} overflow="auto">
         <ParticleRound example={state.example} onFinish={proceed} />{" "}
       </Box>
       <Box>
