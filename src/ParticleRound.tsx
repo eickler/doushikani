@@ -56,42 +56,32 @@ const ParticleRound = ({ example, onFinish }: Props) => {
   return (
     <Grid
       container
+      direction="column"
       alignItems="center"
       justifyContent="center"
-      style={{ minHeight: "100vh" }}
+      style={{ minHeight: "80%" }}
     >
-      <Card>
-        <Grid
-          container
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
-          style={{ minHeight: "80vh", minWidth: "80vh" }}
+      <Grid item>
+        <ParticleHighlighter
+          onSelect={onSelect}
+          text={example.ja}
+          particles={example.indexes}
+          highlight={state.highlights}
+        />
+      </Grid>
+      <Grid item>
+        <Typography
+          variant="h4"
+          style={{
+            visibility:
+              state.highlights[state.cursor] !== Highlight.Cursor && example.en
+                ? "visible"
+                : "hidden",
+          }}
         >
-          <Grid item>
-            <ParticleHighlighter
-              onSelect={onSelect}
-              text={example.ja}
-              particles={example.indexes}
-              highlight={state.highlights}
-            />
-          </Grid>
-          <Grid item>
-            <Typography
-              variant="h4"
-              style={{
-                visibility:
-                  state.highlights[state.cursor] !== Highlight.Cursor &&
-                  example.en
-                    ? "visible"
-                    : "hidden",
-              }}
-            >
-              {example.en}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Card>
+          {example.en}
+        </Typography>
+      </Grid>
     </Grid>
   );
 };

@@ -1,4 +1,4 @@
-import { Box, LinearProgress } from "@material-ui/core";
+import { Box, Card, LinearProgress } from "@material-ui/core";
 import { useState } from "react";
 import { VerbCard } from "./Control";
 import VerbRound from "./VerbRound";
@@ -40,10 +40,13 @@ const VerbRounds = ({ verbs, onFinish }: Props) => {
 
   return (
     <Box height="100vh" display="flex" flexDirection="column">
-      <Box flex={1} overflow="auto">
-        <VerbRound verb={verbs[state.round]} onFinish={proceed} />
-      </Box>
-      <Box>
+      <Card>
+        <Box height="92vh" flex={1} overflow="auto">
+          <VerbRound verb={verbs[state.round]} onFinish={proceed} />
+        </Box>
+      </Card>
+      <Box height="4vh"></Box>
+      <Box height="4vh">
         <LinearProgress
           variant="determinate"
           value={(100 * state.round) / verbs.length}

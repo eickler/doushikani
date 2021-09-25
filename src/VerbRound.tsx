@@ -1,4 +1,4 @@
-import { Card, Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import { useState } from "react";
 import { Choice, Selection } from "./Choice";
 import { Question } from "./Question";
@@ -26,38 +26,27 @@ const VerbRound = (props: Props) => {
   return (
     <Grid
       container
+      spacing={4}
       direction="column"
       alignItems="center"
       justifyContent="center"
-      style={{ minHeight: "100vh" }}
+      style={{ minHeight: "100%" }}
     >
-      <Card>
-        <Grid
-          container
-          spacing={4}
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
-          style={{ minHeight: "80vh", minWidth: "80vh" }}
-        >
-          <Question verb={props.verb.verb} />
-          <Grid item>
-            <Choice
-              currentChoice={selection}
-              correctChoice={correctChoice}
-              onSelected={onSelected}
-            />
-          </Grid>
-          <Grid item>
-            <Typography variant="h4">
-              This verb is:{" "}
-              {(selection !== Selection.NotSelected &&
-                Selection[correctChoice]) ||
-                "..."}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Card>
+      <Question verb={props.verb.verb} />
+      <Grid item>
+        <Choice
+          currentChoice={selection}
+          correctChoice={correctChoice}
+          onSelected={onSelected}
+        />
+      </Grid>
+      <Grid item>
+        <Typography variant="h4">
+          This verb is:{" "}
+          {(selection !== Selection.NotSelected && Selection[correctChoice]) ||
+            "..."}
+        </Typography>
+      </Grid>
     </Grid>
   );
 };
